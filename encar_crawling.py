@@ -5,7 +5,7 @@ import urllib.request
 import time
 
 def diagnosed_item(url, conn, cur, driver): #진단 매물
-    time.sleep(2)
+    time.sleep(3)
 
     data = driver.find_element_by_xpath('//*[@id="carPic"]/div[1]/ul[1]').text.split('\n')
     site = '엔카'
@@ -163,11 +163,7 @@ def normal_item(url, conn, cur, driver): #일반등록 매물
         return
     
     #가격
-    temp = driver.find_element_by_xpath('//*[@id="areaBase"]/div[2]/div[1]/div[1]/span[2]').text
-    temp = temp.replace('만원', '').split(',')
-    price = ''
-    for i in temp:
-        price += i
+    price = driver.find_element_by_xpath('/html/head/meta[10]').get_attribute('content')
     price = int(price + '0000')
 
     distance = data[0].split('Km')[0].split(',')

@@ -16,8 +16,8 @@ def giveData(url, conn, cur, driver, isNormalItem):
 
     driver.close()
 
-def start_crawling(hostip, runtime):
-    start_time = time.time()
+
+def start_crawling(hostip, ):
     conn = pymysql.connect(host=hostip, port=3306, user='dbAdmin', password='xoduqrb', db='usedcardb', charset='utf8')
     cur = conn.cursor()
 
@@ -35,7 +35,6 @@ def start_crawling(hostip, runtime):
     tmp = '//*[@id="content"]/div[2]/div/div[2]/div[2]/div[3]/div[4]/div[2]/div[_NUM_]/div[1]/a'
     badgexpath = '//*[@id="content"]/div[2]/div/div[2]/div[2]/div[3]/div[4]/div[2]/div[_NUM_]/div[1]/span'
 
-    isBreaked = False
     for j in range(startnum, endnum):
         driver.get(page.replace("_PAGENUM_", str(j)))
         time.sleep(2)
@@ -63,12 +62,6 @@ def start_crawling(hostip, runtime):
 
             driver.switch_to.window(driver.window_handles[0])
             time.sleep(3)
-            print('작동 시간 :', time.time() - start_time)
-            if time.time() - start_time > runtime:
-                isBreaked = True
-                break
-        if isBreaked:
-            break
 
-    driver.quit()
+    driver.close()
     conn.close()

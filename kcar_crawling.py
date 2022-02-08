@@ -21,21 +21,6 @@ def direct_sales(url, conn, cur, driver): #직영 매물
         return
     
     cartype = driver.find_element_by_xpath('//*[@id="content"]/div[3]/section[3]/div[2]/ul/li[8]/strong').text
-    
-##    #제조사
-##    searchWord = driver.find_element_by_xpath('//*[@id="container"]/form[6]/input[11]').get_attribute('value')
-##    manufacturer = ''
-##
-##    sql = 'SELECT DISTINCT manufacturer FROM carModel WHERE manufacturer = "{0}"'
-##    sql = sql.format(searchWord)
-##    cur.execute(sql)
-##    rows = cur.fetchall()
-##    if len(rows) == 1:
-##        manufacturer = rows[0][0]
-##            
-##    if manufacturer == '':
-##        print('제조사 오류 발생!')
-##        return
 
     #모델명 확인
     searchWord = driver.find_element_by_xpath('//*[@id="container"]/form[6]/input[12]').get_attribute('value')
@@ -104,21 +89,6 @@ def _3d_sales(url, conn, cur, driver): # 3d 뷰 제공 매물
         return
     
     cartype = driver.find_element_by_xpath('//*[@id="content"]/div[3]/section[3]/div[2]/ul/li[8]/strong').text
-    
-##    #제조사
-##    searchWord = driver.find_element_by_xpath('//*[@id="container"]/form[6]/input[11]').get_attribute('value')
-##    manufacturer = ''
-##
-##    sql = 'SELECT DISTINCT manufacturer FROM carModel WHERE manufacturer = "{0}"'
-##    sql = sql.format(searchWord)
-##    cur.execute(sql)
-##    rows = cur.fetchall()
-##    if len(rows) == 1:
-##        manufacturer = rows[0][0]
-##            
-##    if manufacturer == '':
-##        print('제조사 오류 발생!')
-##        return
 
     #모델명 확인
     searchWord = driver.find_element_by_xpath('//*[@id="container"]/form[6]/input[12]').get_attribute('value')
