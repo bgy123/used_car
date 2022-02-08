@@ -11,7 +11,7 @@ import kcar_crawler
 import bobae_crawler
 
 # IP주소 적기
-hostip = '121.171.247.110'
+hostip = ''
 runtime = 60
 
 encar = threading.Thread(target=encar_crawler.start_crawling, args=(hostip, runtime))
