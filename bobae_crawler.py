@@ -11,7 +11,7 @@ def giveData(url, conn, cur, driver):
 
     driver.close()
 
-def start_crawling(hostip, runtime):
+def start_crawling(hostip, runtime, startnum, endnum):
     start_time = time.time()
     conn = pymysql.connect(host=hostip, port=3306, user='dbAdmin', password='xoduqrb', db='usedcardb', charset='utf8')
     cur = conn.cursor()
@@ -31,8 +31,8 @@ def start_crawling(hostip, runtime):
     pagexpath = "https://www.bobaedream.co.kr/mycar/mycar_list.php?gubun=K&page=__NUM__&order=S11&view_size=20"
 
     # 시작페이지와 끝 페이지 정하기
-    startnum = 1
-    endnum = 15
+    #startnum = 1
+    #endnum = 15
 
     isBreaked = False
     for i in range(startnum, endnum + 1):
@@ -51,17 +51,20 @@ def start_crawling(hostip, runtime):
                 continue
             item_url = item.find_element_by_tag_name('a').get_attribute('href')
             print(item_url)
-            time.sleep(2)
+            driver.implicitly_wait(10)
+            time.sleep(1)
 
             driver.execute_script('window.open("{0}");'.format(item_url))
-            time.sleep(3)
+            driver.implicitly_wait(10)
+            time.sleep(1)
             driver.switch_to.window(driver.window_handles[1])
 
             giveData(item_url, conn, cur, driver)
 
             driver.switch_to.window(driver.window_handles[0])
-            time.sleep(4)
-
+            driver.implicitly_wait(10)
+            time.sleep(2)
+            print('작동 시간 :', time.time() - start_time)
             if time.time() - start_time > runtime:
                 isBreaked = True
                 break

@@ -1,49 +1,49 @@
 import threading
-import time
-import pymysql
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import urllib.request
-
-import encar_crawler
 import KB_crawler
+import encar_crawler
 import kcar_crawler
 import bobae_crawler
+import time
 
-# IP주소 적기
 hostip = '121.171.247.110'
-runtime = 60
 
-encar = threading.Thread(target=encar_crawler.start_crawling, args=(hostip, runtime))
-kb = threading.Thread(target=KB_crawler.start_crawling, args=(hostip, runtime))
-kcar = threading.Thread(target=kcar_crawler.start_crawling, args=(hostip, runtime))
-bobae = threading.Thread(target=bobae_crawler.start_crawling, args=(hostip, runtime))
+# i 값에 따라
+i = 0
 
-try:
-     encar.start()
-     encar.join()
-except:
-     print("err")
+# 0 : 엔카
+encar_start_page = 1
+encar_end_page = 15
 
-try:
-    kb.start()
-    kb.join()
-except:
-     print("err")
+# 1 : KB_차차차
+kb_start_page = 1
+kb_end_page = 20
 
-try:
-    kcar.start()
-    kcar.join()
-except:
-     print("err")
+# 2 : 케이카
+kcar_start_page = 1
+kcar_end_page = 15
 
-try:
-    bobae.start()
-    bobae.join()
-except:
-     print("err")
+# 3 : 보배드림
+bobae_start_page = 1
+bobae_end_page = 15
 
 
+while True:
+    if i == 0:
+        t = threading.Thread(target=encar_crawler.start_crawling, args=(hostip, 30, encar_start_page, encar_end_page))
+        t.start()
+        t.join()
+    elif i == 1:
+        t = threading.Thread(target=KB_crawler.start_crawling, args=(hostip, 30, kb_start_page, kb_end_page))
+        t.start()
+        t.join()
+    elif i == 2:
+        t = threading.Thread(target=kcar_crawler.start_crawling, args=(hostip, 30, kcar_start_page, kcar_end_page))
+        t.start()
+        t.join()
+    elif i == 3:
+        t = threading.Thread(target=bobae_crawler.start_crawling, args=(hostip, 30, bobae_start_page, bobae_end_page))
+        t.start()
+        t.join()
 
-
-
+    time.sleep(90)
+    i = (i + 1) % 4

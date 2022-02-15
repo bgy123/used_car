@@ -11,7 +11,8 @@ def crawl_item(url, conn, cur, driver):
     site = '보배드림'
     title = driver.find_element_by_xpath('//*[@id="bobaeConent"]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/h3').text
 
-    carnumber = driver.find_element_by_xpath('//*[@id="bobaeConent"]/div[2]/div[1]/div[1]/div[1]/div[4]/dl/dd[1]/b').text
+    gallery_data = driver.find_element_by_class_name('gallery-data')
+    carnumber = gallery_data.find_element_by_tag_name('dd').text
     carnumber = carnumber.replace("차량번호 ", "")
     
     # 차번호로 중복체크

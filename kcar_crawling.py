@@ -125,8 +125,14 @@ def _3d_sales(url, conn, cur, driver): # 3d 뷰 제공 매물
     carfuel = driver.find_element_by_xpath('//*[@id="content"]/div[3]/section[3]/div[2]/ul/li[7]/strong').text
 
     # 사진 가져오기
-    text = driver.find_element_by_xpath('//*[@id="container"]/script[13]').get_attribute('innerText')
-    img = text.split('carPic = \"')[1].split("\";")[0]
+    text = ''
+    container = driver.find_element_by_xpath('//*[@id="container"]')
+    scripts = container.find_elements_by_tag_name('script')
+    for script in scripts:
+        if script.get_attribute('innerText').find('carPic = "') != -1:
+            text = script.get_attribute('innerText')
+    if text != '':
+        img = text.split('carPic = "')[1].split('";')[0]
     picturexpath = '//*[@id="carImgSlider"]/li[1]/a/img'
     imglink = "carimg/kcar/" + carnumber + ".jpg"
     urllib.request.urlretrieve(img, "C:/xampp/htdocs/" + imglink)

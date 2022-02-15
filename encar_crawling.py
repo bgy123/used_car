@@ -67,9 +67,7 @@ def diagnosed_item(url, conn, cur, driver): #진단 매물
         price += i
     price = int(price + '0000')
 
-    distance = data[0].split('Km')[0].split(',')
-    distance = distance[0] + distance[1] # 주행거리
-    
+    distance = data[0].replace(',', '').replace('Km', '') # 주행거리
     displacement = data[4]
     
     caryear = data[1].split()[0] + ' ' + data[1].split()[1] # 연식
@@ -166,9 +164,7 @@ def normal_item(url, conn, cur, driver): #일반등록 매물
     price = driver.find_element_by_xpath('/html/head/meta[10]').get_attribute('content')
     price = int(price + '0000')
 
-    distance = data[0].split('Km')[0].split(',')
-    distance = distance[0] + distance[1] # 주행거리
-    
+    distance = data[0].replace(',', '').replace('Km', '') # 주행거리
     displacement = data[4]
     
     caryear = data[1].split()[0] + ' ' + data[1].split()[1] # 연식

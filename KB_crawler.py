@@ -16,7 +16,7 @@ def giveData(url, conn, cur, driver, isNormalItem):
 
     driver.close()
 
-def start_crawling(hostip, runtime):
+def start_crawling(hostip, runtime, startnum, endnum):
     start_time = time.time()
     conn = pymysql.connect(host=hostip, port=3306, user='dbAdmin', password='xoduqrb', db='usedcardb', charset='utf8')
     cur = conn.cursor()
@@ -27,8 +27,8 @@ def start_crawling(hostip, runtime):
     time.sleep(2)
 
     # 시작페이지와 끝 페이지 정하기
-    startnum = 1
-    endnum = 3
+    #startnum = 1
+    #endnum = 20
 
     page = "https://www.kbchachacha.com/public/search/main.kbc#!?countryOrder=1&page=_PAGENUM_&sort=-orderDate"
 
@@ -55,14 +55,16 @@ def start_crawling(hostip, runtime):
             # 페이지를 열었다가 닫기
 
             driver.execute_script('window.open("{0}");'.format(item))
-            time.sleep(3)
+            driver.implicitly_wait(10)
+            time.sleep(1)
             driver.switch_to.window(driver.window_handles[1])
 
             # DB에 데이터 저장하기
             giveData(item, conn, cur, driver, isNormalItem)
 
             driver.switch_to.window(driver.window_handles[0])
-            time.sleep(3)
+            driver.implicitly_wait(10)
+            time.sleep(1)
             print('작동 시간 :', time.time() - start_time)
             if time.time() - start_time > runtime:
                 isBreaked = True

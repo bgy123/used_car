@@ -16,7 +16,7 @@ def giveData(url, conn, cur, driver):
 
     driver.close()
 
-def start_crawling(hostip, runtime):
+def start_crawling(hostip, runtime, startnum, endnum):
     start_time = time.time()
     conn = pymysql.connect(host=hostip, port=3306, user='dbAdmin', password='xoduqrb', db='usedcardb', charset='utf8')
     cur = conn.cursor()
@@ -36,8 +36,8 @@ def start_crawling(hostip, runtime):
     link = 'http://www.encar.com/dc/dc_carsearchlist.do?carType=kor#!%7B%22action%22%3A%22(And.Hidden.N._.CarType.Y.)%22%2C%22toggle%22%3A%7B%7D%2C%22layer%22%3A%22%22%2C%22sort%22%3A%22ModifiedDate%22%2C%22page%22%3A_PAGENUM_%2C%22limit%22%3A20%7D'
 
     # 시작페이지와 끝 페이지 정하기
-    startnum = 1
-    endnum = 10
+    #startnum = 1
+    #endnum = 10
 
     isBreaked = False
     for j in range(startnum, endnum):
@@ -49,18 +49,29 @@ def start_crawling(hostip, runtime):
             if item.value_of_css_property('display') != 'none':
                 item_url = driver.find_element_by_xpath(tmp2.replace("num", str(i))).get_attribute('href')
 
+                # 주소창 출력
                 print(item_url)
+                driver.implicitly_wait(10)
                 time.sleep(2)
 
                 driver.execute_script('window.open("{0}");'.format(item_url))
-                time.sleep(3)
+                driver.implicitly_wait(10)
+                time.sleep(2)
+
                 driver.switch_to.window(driver.window_handles[1])
 
-                giveData(item_url, conn, cur, driver)
+                try:
+                    giveData(item_url, conn, cur, driver)
+                except:
+                    print("에러 발생 다음 매물을 검색합니다.")
+                    driver.close()
 
                 driver.switch_to.window(driver.window_handles[0])
-                time.sleep(4)
 
+                driver.implicitly_wait(10)
+                time.sleep(2)
+
+            print('작동 시간 :', time.time() - start_time)
             if time.time() - start_time > runtime:
                 isBreaked = True
                 break

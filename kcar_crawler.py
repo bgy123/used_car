@@ -14,7 +14,7 @@ def giveData(url, conn, cur, driver, is3D):
 
     driver.close()
 
-def start_crawling(hostip, runtime):
+def start_crawling(hostip, runtime, startnum, endnum):
     start_time = time.time()
     conn = pymysql.connect(host=hostip, port=3306, user='dbAdmin', password='xoduqrb', db='usedcardb', charset='utf8')
     cur = conn.cursor()
@@ -34,14 +34,15 @@ def start_crawling(hostip, runtime):
     pageButton = '//*[@id="kcarSearchListPaging"]/div/button[bNum]'
 
     # 시작페이지와 끝 페이지 정하기
-    startnum = 1
-    endnum = 20
+    #startnum = 1
+    #endnum = 20
 
     isBreaked = False
     for i in range(startnum, endnum+1):
         print(str(i) + "페이지")
         driver.find_element_by_xpath(pageButton.replace('bNum', str((i-1) % 10 + 1))).click()
-        time.sleep(2)
+        driver.implicitly_wait(10)
+        time.sleep(1)
 
         for j in range(1, 16):
             item = driver.find_element_by_xpath(carxpath.replace("num", str(j)))
@@ -59,14 +60,16 @@ def start_crawling(hostip, runtime):
             print(item_url)
 
             driver.execute_script('window.open("{0}");'.format(item_url))
-            time.sleep(2)
+            driver.implicitly_wait(10)
+            time.sleep(1)
             driver.switch_to.window(driver.window_handles[1])
 
             giveData(item_url, conn, cur, driver, is3D)
 
             driver.switch_to.window(driver.window_handles[0])
-            time.sleep(2)
-
+            driver.implicitly_wait(10)
+            time.sleep(1)
+            print('작동 시간 :', time.time() - start_time)
             if time.time() - start_time > runtime:
                 isBreaked = True
                 break
